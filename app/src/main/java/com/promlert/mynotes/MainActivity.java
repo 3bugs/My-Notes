@@ -15,34 +15,35 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<Note> mAdapter;
     private NotesDb db;
+    private ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView list = (ListView) findViewById(R.id.listView);
+        db = new NotesDb(this);
+
+        list = (ListView) findViewById(R.id.listView);
         Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText noteEditText = (EditText) findViewById(R.id.note_edit_text);
                 String inputText = noteEditText.getText().toString();
+
                 CheckBox importantCheckBox = (CheckBox) findViewById(R.id.important_check_box);
                 boolean isImportant = importantCheckBox.isChecked();
 
-                Note n = new Note(
-                        -1,
-                        inputText,
-                        isImportant
-                );
-
-                db.insertNote(n);
+                db.insertNote(inputText, isImportant);
+                reloadData();
             }
         });
 
+        reloadData();
+    }
 
-        db = new NotesDb(this);
+    private void reloadData() {
         ArrayList<Note> noteArrayList = db.getAllNotes();
 
         mAdapter = new ArrayAdapter<Note>(

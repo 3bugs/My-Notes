@@ -85,6 +85,16 @@ public class NotesDb {
         return result;
     }
 
+    public long insertNote(String text, boolean isImportant) {
+        return insertNote(
+                new Note(
+                        -1, // ไม่ได้ใช้
+                        text,
+                        isImportant
+                )
+        );
+    }
+
     private class DatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseHelper(Context context) {
@@ -122,6 +132,4 @@ public class NotesDb {
             onCreate(db);
         }
     }
-
-
 }
