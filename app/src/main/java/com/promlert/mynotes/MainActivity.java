@@ -2,7 +2,10 @@ package com.promlert.mynotes;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -18,6 +21,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ListView list = (ListView) findViewById(R.id.listView);
+        Button saveButton = (Button) findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText input = (EditText) findViewById(R.id.note_edit_text);
+                String note = input.getText().toString();
+
+                Note n = new Note(-1, note, )
+
+                db.insertNote()
+            }
+        });
+
 
         db = new NotesDb(this);
         ArrayList<Note> noteArrayList = db.getAllNotes();
