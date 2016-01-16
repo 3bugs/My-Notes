@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -25,12 +26,18 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText input = (EditText) findViewById(R.id.note_edit_text);
-                String note = input.getText().toString();
+                EditText noteEditText = (EditText) findViewById(R.id.note_edit_text);
+                String inputText = noteEditText.getText().toString();
+                CheckBox importantCheckBox = (CheckBox) findViewById(R.id.important_check_box);
+                boolean isImportant = importantCheckBox.isChecked();
 
-                Note n = new Note(-1, note, )
+                Note n = new Note(
+                        -1,
+                        inputText,
+                        isImportant
+                );
 
-                db.insertNote()
+                db.insertNote(n);
             }
         });
 
