@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,24 +57,28 @@ public class MainActivity extends AppCompatActivity {
         reloadData();
     }
 
+    private ArrayList<Note> noteArrayList;
+
     private void reloadData() {
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                final ArrayList<Note> noteArrayList = mDb.getAllNotes();
+                noteArrayList = mDb.getAllNotes();
                 mNoteArrayList.clear();
                 mNoteArrayList.addAll(noteArrayList);
 
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                new Handler(Looper.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
         t.start();
+
     }
 
     private static class MyAdapter extends ArrayAdapter {
@@ -93,10 +96,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(context, layoutResId, null);
+        public int getCount() {
+            return noteArrayList.size();
+        }
 
-            LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.main_layout);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View view = convertView;
+            if (view == null) {
+                view = View.inflate(context, layoutResId, null);
+            }
+
             View importantView = view.findViewById(R.id.important_view);
 
             TextView noteTextView = (TextView) view.findViewById(R.id.note_text_view);
